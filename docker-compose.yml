@@ -1,0 +1,8 @@
+services:
+  office:
+    build: .
+    command: python3 -m http.server
+    volumes:
+      - ./work:/root/work
+    environment:
+      - HOME=/root/work

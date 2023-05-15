@@ -1,0 +1,2 @@
+which soffice
+exit
