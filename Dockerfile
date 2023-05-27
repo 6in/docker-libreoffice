@@ -30,3 +30,25 @@ RUN chmod 777 /root/work
 
 # フォントをインストール
 RUN apt -y install fonts-ipafont
+
+# PDFを画像に変換するツール(pdftoppm/pdftotext)
+RUN apt -y install poppler-utils
+
+# 画像変換を行う
+RUN apt -y install imagemagick
+
+# PIPをインストール
+RUN apt -y install python3-pip
+
+# 形態素解析
+RUN pip3 install mecab-python3
+RUN pip3 install unidic
+
+# FastAPI
+RUN apt -y install uvicorn
+RUN pip3 install fastapi
+
+# よく使うコマンド①
+RUN apt -y install curl zip unzip
+
+RUN pip3 install unotools
