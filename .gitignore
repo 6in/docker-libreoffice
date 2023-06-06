@@ -1,7 +1,10 @@
 work/.cache
 work/.config
+work/*/*.png
 work/*/*.ppt*
 work/*/*.xls*
 work/*/*.doc*
 work/*/*.pdf
+work/*/*.txt
+
 .DS_Store
