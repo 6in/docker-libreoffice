@@ -35,6 +35,33 @@ def pdf_to_text(pdf_file):
         command = f"pdftotext -f %d -l %d {pdf_file} {output_file}" % (x, x)
         run_bash_command(command)
 
+        text = ""
+        with open(output_file, "r") as f:
+            text = f.read()
+        with open(output_file, "w") as f:
+            f.write(re.sub(r"\s+", " ", text))
 
+
+def doc_to_pdf(input_file, output_dir):
+    command = "".join(f""" 
+    /usr/bin/soffice --nolockcheck --nologo --headless --norestore
+             --language=ja --nofirststartwizard --convert-to pdf
+             --outdir "{output_dir}" "{input_file}"
+    """.split("\n"))
+    print(command)
+    run_bash_command(command)
+
+
+def pdf_to_png(input_pdf):
+    command = f"""
+    pdftoppm -png {input_pdf} {input_pdf}
+    """
+    run_bash_command(command)
+
+
+ppt_file = "input/sample.pptx"
 pdf_file = "output/sample.pdf"
+
+doc_to_pdf(ppt_file, "output/")
+pdf_to_png(pdf_file)
 pdf_to_text(pdf_file)
