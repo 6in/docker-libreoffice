@@ -1,2 +1,5 @@
-work*/
+work/work*/
+work/input/*.pptx
+work/output/*.zip
+work/.*
 .DS_Store
