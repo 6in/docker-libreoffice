@@ -1,5 +1,9 @@
 work/work*/
 work/input/*.pptx
 work/output/*.zip
+work/.bash_history
+work/.python_history
 work/.*
+http_ca.crt
 .DS_Store
+es_data

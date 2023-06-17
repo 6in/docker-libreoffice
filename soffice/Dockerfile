@@ -52,3 +52,4 @@ RUN pip3 install fastapi
 RUN apt -y install curl zip unzip
 
 RUN pip3 install unotools
+RUN pip3 install pyyaml

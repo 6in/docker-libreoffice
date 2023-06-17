@@ -1,5 +1,3 @@
 DSTPATH=/root/work/output
 SRCPATH=/root/work/input/sample.pptx
-docker-compose run office /usr/bin/soffice --nolockcheck --nologo --headless --norestore \
-                 --language=ja --nofirststartwizard --convert-to pdf \
-                 --outdir "${DSTPATH}" "${SRCPATH}"
+docker-compose exec office /bin/bash -c "cd /root/work && python3 scripts/pdf_to_zip.py"

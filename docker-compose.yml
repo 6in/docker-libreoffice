@@ -1,8 +1,39 @@
 services:
-  office:
-    build: .
+  # office(pdf converter)
+  soffice:
+    container_name: soffice
+    build: ./soffice/
     command: python3 -m http.server
     volumes:
       - ./work:/root/work
     environment:
       - HOME=/root/work
+    restart: always
+
+  # elasticsearch
+  es:
+    container_name: elasticsearch
+    build: ./elastic-search/
+    environment:
+      - discovery.type=single-node
+      - cluster.name=docker-cluster
+      - bootstrap.memory_lock=true
+      - ELASTIC_PASSWORD=espass
+
+      - http.host=0.0.0.0
+      - http.cors.enabled=true
+      - "http.cors.allow-origin='*'"
+      - http.cors.allow-credentials=true
+      # - "http.cors.allow-methods='*'"
+      - "http.cors.allow-headers='*'"
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ports:
+      - 9200:9200
+    volumes:
+      - ./es_data:/usr/share/elasticsearch/data
+    tty: true
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    restart: always
