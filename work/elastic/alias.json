@@ -1,0 +1,10 @@
+{
+    "actions": [
+        {
+            "add": {
+                "index": "my_index",
+                "alias": "doc-search-alias"
+            }
+        }
+    ]
+}

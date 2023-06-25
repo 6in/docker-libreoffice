@@ -4,6 +4,7 @@ import os
 import zipfile
 import shutil
 import yaml
+from PIL import Image
 
 
 def run_bash_command(command: str):
@@ -29,26 +30,35 @@ def text_to_map(text: str):
     return ret
 
 
-def pdf_to_text(pdf_file: str, output_dir: str):
+def pdf_to_text(pdf_file: str, output_dir: str) -> dict[str, object]:
     print(f"pdf_to_text({pdf_file})")
 
     command = f'pdfinfo {pdf_file}'
     result = run_bash_command(command)
     param = text_to_map(result)
-    with open(f"{output_dir}/pdf_info.yml", "w") as f:
-        param['Pages'] = int(param["Pages"])
-        yaml.dump(param, f)
+    param['Pages'] = int(param["Pages"])
+    param["page_sizes"] = []
 
     for x in range(1, param["Pages"]+1):
-        output_file = f"{pdf_file}-%02d.txt" % x
+        output_file = f"{output_dir}/text-%02d.txt" % x
         command = f"pdftotext -f %d -l %d {pdf_file} {output_file}" % (x, x)
         run_bash_command(command)
 
+        # テキストのスペースを最適化
         text = ""
         with open(output_file, "r") as f:
             text = f.read()
         with open(output_file, "w") as f:
             f.write(re.sub(r"\s+", " ", text))
+
+        file = f"{output_dir}/image-%02d.png" % x
+        w, h = get_image_size(file)
+        param["page_sizes"].append(dict(page=x, width=w, height=h))
+
+    with open(f"{output_dir}/pdf_info.yml", "w") as f:
+        yaml.dump(param, f)
+
+    return param
 
 
 def doc_to_pdf(input_file: str, output_dir: str):
@@ -62,13 +72,27 @@ def doc_to_pdf(input_file: str, output_dir: str):
     run_bash_command(command)
 
 
-def pdf_to_png(input_pdf: str):
+def pdf_to_png(input_pdf: str, output_dir):
     print(f"pdf_to_png({input_pdf})")
-
     command = f"""
-    pdftoppm -png {input_pdf} {input_pdf}
+    pdftoppm -png {input_pdf} {output_dir}/image
     """
     run_bash_command(command)
+
+
+def png_size(param, output_dir):
+    maxPages = param["Pages"] + 1
+    for i in range(1..maxPages):
+        file = f"{output_dir}/image-%02d" % i
+        w, h = get_image_size(file)
+
+
+def get_image_size(file_path):
+    # 画像ファイルを開く
+    with Image.open(file_path) as img:
+        # 幅と高さを取得
+        width, height = img.size
+    return width, height
 
 
 def out_to_zip(folder_path: str, output_path: str):
@@ -97,8 +121,9 @@ def main(input_file: str, work_dir: str):
 
     os.makedirs(work_dir, exist_ok=True)
     doc_to_pdf(input_file, work_dir)
-    pdf_to_png(pdf_file)
-    pdf_to_text(pdf_file, work_dir)
+    pdf_to_png(pdf_file, work_dir)
+    param = pdf_to_text(pdf_file, work_dir)
+    os.remove(pdf_file)
     out_to_zip(work_dir, zip_file)
     shutil.rmtree(work_dir)
 

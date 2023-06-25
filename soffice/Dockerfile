@@ -53,3 +53,5 @@ RUN apt -y install curl zip unzip
 
 RUN pip3 install unotools
 RUN pip3 install pyyaml
+RUN pip3 install pillow
+RUN pip3 install elasticsearch

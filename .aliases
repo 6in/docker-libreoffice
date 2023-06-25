@@ -1,0 +1,7 @@
+alias up="rm -rf es_data && docker-compose up -d"
+alias down="docker-compose down"
+alias logs="docker-compose logs -f"
+alias build="docker-compose build"
+alias dps="docker-compose ps"
+alias esping="curl -k -u elastic:espass https://localhost:9200"
+alias bs="docker-compose exec soffice /bin/bash"

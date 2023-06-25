@@ -9,6 +9,8 @@ services:
     environment:
       - HOME=/root/work
     restart: always
+    depends_on:
+      - es
 
   # elasticsearch
   es:
@@ -29,6 +31,7 @@ services:
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
     ports:
       - 9200:9200
+      - 9300:9300
     volumes:
       - ./es_data:/usr/share/elasticsearch/data
     tty: true

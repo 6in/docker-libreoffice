@@ -1,0 +1,80 @@
+{
+    "settings": {
+        "analysis": {
+            "analyzer": {
+                "my_ja_analyzer": {
+                    "type": "custom",
+                    "char_filter": [
+                        "icu_normalizer"
+                    ],
+                    "tokenizer": "kuromoji_tokenizer",
+                    "filter": [
+                        "kuromoji_baseform",
+                        "kuromoji_part_of_speech",
+                        "ja_stop",
+                        "kuromoji_number",
+                        "kuromoji_stemmer"
+                    ]
+                },
+                "ja_ngram_index_analyzer": {
+                    "type": "custom",
+                    "char_filter": [
+                        "icu_normalizer"
+                    ],
+                    "tokenizer": "ja_ngram_tokenizer",
+                    "filter": [
+                        "lowercase"
+                    ]
+                },
+                "ja_ngram_search_analyzer": {
+                    "type": "custom",
+                    "char_filter": [
+                        "icu_normalizer"
+                    ],
+                    "tokenizer": "ja_ngram_tokenizer",
+                    "filter": [
+                        "lowercase"
+                    ]
+                }
+            },
+            "tokenizer": {
+                "ja_ngram_tokenizer": {
+                    "type": "ngram",
+                    "min_gram": 2,
+                    "max_gram": 2,
+                    "token_chars": [
+                        "letter",
+                        "digit"
+                    ]
+                }
+            }
+        }
+    },
+    "mappings": {
+        "properties": {
+            "path_hash": {
+                "type": "keyword"
+            },
+            "text_content": {
+                "type": "text",
+                "analyzer": "ja_ngram_search_analyzer"
+            },
+            "file_path": {
+                "type": "text",
+                "analyzer": "ja_ngram_search_analyzer"
+            },
+            "file_type": {
+                "type": "keyword"
+            },
+            "page_no": {
+                "type": "integer"
+            },
+            "width": {
+                "type": "integer"
+            },
+            "height": {
+                "type": "integer"
+            }
+        }
+    }
+}
